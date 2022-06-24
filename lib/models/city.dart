@@ -5,7 +5,6 @@ class City with ChangeNotifier {
   bool isSelected;
   final String city;
   final String country;
-  final bool isDefault;
   
 
   City({
@@ -13,7 +12,6 @@ class City with ChangeNotifier {
     required this.isSelected,
     required this.city,
     required this.country,
-    required this.isDefault,
   });
 
   void toggleSelected() {
