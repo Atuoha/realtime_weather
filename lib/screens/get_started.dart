@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../constants/constants.dart';
+import 'welcome.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -15,32 +17,45 @@ class GetStarted extends StatelessWidget {
       body: Container(
         alignment: Alignment.center,
         constraints: const BoxConstraints.expand(),
-        color: Colors.blueAccent,
+        color: Constants.primaryColor,
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Image.asset(
-                  'assets/images/get-started.png',
-                ),
+              Image.asset(
+                'assets/images/started.png',
               ),
               const SizedBox(height: 20),
-              Container(
-                height: 50,
-                width: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+              GestureDetector(
+                onTap: () => Navigator.of(
+                  context,
+                ).pushNamed(
+                  Welcome.routeName,
                 ),
-                child: const Center(
-                  child: Text(
-                    'Get Started👋',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                child: Container(
+                  height: 50,
+                  width: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child:  Center(
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [Text(
+                        'Get Started',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color:Constants.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                       Icon(
+                Icons.pin_drop,
+                color: Constants.primaryColor,
+              ),
+                      ]
                     ),
                   ),
                 ),

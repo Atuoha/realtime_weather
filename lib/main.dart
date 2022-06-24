@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp/providers/city.dart';
 import 'screens/screens.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(const WeatherApp());
 
@@ -8,10 +10,17 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'WeatherApp',
-      home: GetStarted(),
+    return  ChangeNotifierProvider(
+      create: (context)=> CityData(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'WeatherApp',
+        home: const GetStarted(),
+        routes: {
+          HomeScreen.routeName: (context) => const HomeScreen(),
+          Welcome.routeName: (context) => const Welcome()
+        },
+      ),
     );
   }
 }
