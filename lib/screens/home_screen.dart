@@ -35,10 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
           'https://api.openweathermap.org/data/2.5/weather?q=${cityData.weatherCity}&appid=${cityData.weatherAPI}';
       var searchedResult = await http.get(Uri.parse(urlString));
       var response = json.decode(searchedResult.body);
+      print(cityData.weatherCity);
       print(response);
-      
 
-      
       // if (jsonConvert.cod == '404') {
       //   errorMsg = jsonConvert.code.message;
       // }

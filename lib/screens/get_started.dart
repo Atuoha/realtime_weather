@@ -40,22 +40,23 @@ class GetStarted extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child:  Center(
+                  child: Center(
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [Text(
-                        'Get Started',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color:Constants.primaryColor,
-                          fontWeight: FontWeight.bold,
+                      children: [
+                        Text(
+                          'Get Started',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Constants.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                       Icon(
-                Icons.pin_drop,
-                color: Constants.primaryColor,
-              ),
-                      ]
+                        Icon(
+                          Icons.pin_drop,
+                          color: Constants.primaryColor,
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -11,12 +11,13 @@ class CitySelectionType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cityProvider = Provider.of<CityData>(context);
     // navigating to home screen
     void _navigateToHomeScreen() {
       Navigator.of(context).pushNamed(HomeScreen.routeName);
+      cityProvider.swapSelectedData();
     }
 
-    var cityProvider = Provider.of<CityData>(context);
     Size size = MediaQuery.of(context).size;
 
     // Status color to transparent

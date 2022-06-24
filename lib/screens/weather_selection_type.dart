@@ -41,7 +41,6 @@ class WeatherType extends StatelessWidget {
                       ).pushNamed(
                         CitySelectionType.routeName,
                       );
-                      cityProvider.swapSelectedData();
                       cityProvider.toggleMode(true);
                     },
                     child: Container(
