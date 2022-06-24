@@ -5,9 +5,9 @@ import 'package:weatherapp/providers/city.dart';
 import 'package:weatherapp/screens/home_screen.dart';
 import '../constants/constants.dart';
 
-class Welcome extends StatelessWidget {
-  static const routeName = '/welcome';
-  const Welcome({Key? key}) : super(key: key);
+class CitySelectionType extends StatelessWidget {
+  static const routeName = '/city-selection';
+  const CitySelectionType({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +64,8 @@ class Welcome extends StatelessWidget {
       body: ListView.builder(
         itemCount: cityProvider.cities().length,
         itemBuilder: (context, index) => Container(
-          margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.fromLTRB(10, 10, 20, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           height: size.height * 0.08,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -121,3 +121,5 @@ class Welcome extends StatelessWidget {
     );
   }
 }
+
+// <uses-permission android:name="android.permission.INTERNET"/>

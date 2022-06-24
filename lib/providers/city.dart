@@ -2,9 +2,16 @@ import 'package:flutter/cupertino.dart';
 import '../models/city.dart';
 
 class CityData extends ChangeNotifier {
+  String searchedCity = '';
+  
   void toggleIsSelected(int id) {
     var city = _citiesList.firstWhere((city) => city.id == id);
     city.toggleSelected();
+    notifyListeners();
+  }
+
+  void searchCity(String city) {
+    searchedCity = city;
     notifyListeners();
   }
 
@@ -16,7 +23,7 @@ class CityData extends ChangeNotifier {
   final List _citiesList = [
     City(
       id: 1,
-      isSelected: true,
+      isSelected: false,
       city: 'Lagos',
       country: 'Nigeria',
       isDefault: false,
@@ -34,7 +41,7 @@ class CityData extends ChangeNotifier {
     ),
     City(
       id: 20,
-      isSelected: true,
+      isSelected: false,
       city: 'Port Harcourt',
       country: 'Nigeria',
       isDefault: false,
@@ -43,7 +50,7 @@ class CityData extends ChangeNotifier {
     ),
     City(
       id: 21,
-      isSelected: true,
+      isSelected: false,
       city: 'Abuja',
       country: 'Nigeria',
       isDefault: false,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/providers/city.dart';
+import 'weather-types/types.dart';
 import 'screens/screens.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,9 @@ class WeatherApp extends StatelessWidget {
         home: const GetStarted(),
         routes: {
           HomeScreen.routeName: (context) => const HomeScreen(),
-          Welcome.routeName: (context) => const Welcome()
+          WeatherType.routeName: (context) => const WeatherType(),
+          CitySelectionType.routeName: (context) => const CitySelectionType(),
+          SearchType.routeName: (context) => const SearchType(),
         },
       ),
     );

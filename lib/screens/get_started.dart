@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../constants/constants.dart';
-import 'welcome.dart';
+import 'weather_selection_type.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class GetStarted extends StatelessWidget {
                 onTap: () => Navigator.of(
                   context,
                 ).pushNamed(
-                  Welcome.routeName,
+                  WeatherType.routeName,
                 ),
                 child: Container(
                   height: 50,

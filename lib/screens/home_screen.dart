@@ -13,14 +13,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int humidity = 0;
   int temperature = 0;
+  int pressure = 0;
   int windSpeed = 0;
   int maxTemp = 0;
+  int minTemp = 0;
   String weatherStateName = 'Loading...';
 
   String imgUrl = '';
+  String description = '';
   String currentState = '...Loading';
-  int woeid = 56057581; // Our WOEID for Lagos Nigeria which is the default
-  String location = 'Lagos Nigeria'; // Default
+  double lon = 7.03041; // default location longitude
+  double lat = 5.48333; // default location latitude
+  String location = 'Owerri, Nigeria'; // default location name
+
+
 
   @override
   Widget build(BuildContext context) {
