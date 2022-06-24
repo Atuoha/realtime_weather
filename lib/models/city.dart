@@ -6,6 +6,8 @@ class City with ChangeNotifier {
   final String city;
   final String country;
   final bool isDefault;
+  final double lon;
+  final double lat;
 
   City({
     required this.id,
@@ -13,6 +15,9 @@ class City with ChangeNotifier {
     required this.city,
     required this.country,
     required this.isDefault,
+    required this.lon,
+    required this.lat,
+
   });
 
   void toggleSelected() {

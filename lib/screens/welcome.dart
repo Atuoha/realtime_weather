@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/city.dart';
+import 'package:weatherapp/screens/home_screen.dart';
 import '../constants/constants.dart';
 
 class Welcome extends StatelessWidget {
@@ -10,8 +11,16 @@ class Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // navigating to home screen
+    void _navigateToHomeScreen() {
+      Navigator.of(context).pushNamed(HomeScreen.routeName);
+    }
+
     var cityProvider = Provider.of<CityData>(context);
     Size size = MediaQuery.of(context).size;
+
+    // Status color to transparent
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -20,15 +29,15 @@ class Welcome extends StatelessWidget {
     return Scaffold(
       floatingActionButton: cityProvider.getSelectedCities().isNotEmpty
           ? FloatingActionButton(
-            backgroundColor: Constants.primaryColor,
-              onPressed: null,
+              backgroundColor: Constants.primaryColor,
+              onPressed: _navigateToHomeScreen,
               child: const Icon(
                 Icons.pin_drop,
                 color: Colors.white,
               ),
             )
           : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
         backgroundColor: Constants.primaryColor,
         centerTitle: true,
@@ -42,7 +51,7 @@ class Welcome extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: null,
+            onPressed: _navigateToHomeScreen,
             icon: Icon(
               cityProvider.getSelectedCities().isNotEmpty
                   ? Icons.chevron_right_rounded
@@ -55,7 +64,7 @@ class Welcome extends StatelessWidget {
       body: ListView.builder(
         itemCount: cityProvider.cities().length,
         itemBuilder: (context, index) => Container(
-          margin: const EdgeInsets.fromLTRB(10, 10, 20, 0),
+          margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           padding: const EdgeInsets.symmetric(horizontal: 20),
           height: size.height * 0.08,
           width: double.infinity,
@@ -88,10 +97,11 @@ class Welcome extends StatelessWidget {
                       .toggleIsSelected(cityProvider.cities()[index].id);
                 },
                 child: Image.asset(
-                    cityProvider.cities()[index].isSelected
-                        ? 'assets/images/checked.png'
-                        : 'assets/images/unchecked.png',
-                    width: 20),
+                  cityProvider.cities()[index].isSelected
+                      ? 'assets/images/checked.png'
+                      : 'assets/images/unchecked.png',
+                  width: 20,
+                ),
               ),
               const SizedBox(width: 10),
               Text(
