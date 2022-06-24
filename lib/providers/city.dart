@@ -2,24 +2,76 @@ import 'package:flutter/cupertino.dart';
 import '../models/city.dart';
 
 class CityData extends ChangeNotifier {
-  String searchedCity = '';
-  
+  // https://home.openweathermap.org/api_keys
+  var weatherAPI = '';
+
+  // weather data
+  String weatherCity = '';
+  var selectedlatitude = 0.0;
+  var selectedlongitudeg = 0.0;
+  int selectedhumidity = 0;
+  int selectedtemperature = 0;
+  int selectedpressure = 0;
+  int selectedWindSpeed = 0;
+  int selectedMaxTemp = 0;
+  int selectedMinTemp = 0;
+  String selectedWeatherStateName = 'Loading...';
+
+  String selectedImgUrl = '';
+  String selectedDescription = '';
+  String selectedDurrentState = '...Loading';
+
+  // mode
+  bool selectionMode = true;
+
+  void toggleMode(bool selection) {
+    selectionMode = selection;
+    switch (selection) {
+      case false:
+        weatherCity = '';
+        break;
+      default:
+    }
+    notifyListeners();
+  }
+
+  // for selection type mode  - selecting the first city as default
+  void swapSelectedData() {
+    var city = _citiesList.firstWhere(
+      (city) => city.isSelected == true,
+    );
+    weatherCity = city.city;
+  }
+
+// for search type -- assigning the approved city to weatherCity variable
+  void updateWeatherCity(String city) {
+    weatherCity = city;
+    notifyListeners();
+  }
+
+  void clearSelectedData() {
+    weatherCity = '';
+  }
+
   void toggleIsSelected(int id) {
-    var city = _citiesList.firstWhere((city) => city.id == id);
+    var city = _citiesList.firstWhere(
+      (city) => city.id == id,
+    );
     city.toggleSelected();
     notifyListeners();
   }
 
-  void searchCity(String city) {
-    searchedCity = city;
-    notifyListeners();
-  }
+  // void updateWeather() {
+  //   currentWeather = data;
+  //   notifyListeners();
+  // }
 
   List cities() {
     return [..._citiesList];
   }
 
   //List of Cities data
+  //-- if you need more cities to select from, you can use the city.list. follow the format and add more cities to the list
   final List _citiesList = [
     City(
       id: 1,
@@ -27,8 +79,8 @@ class CityData extends ChangeNotifier {
       city: 'Lagos',
       country: 'Nigeria',
       isDefault: false,
-      lon: 3.75,
-      lat: 6.58333,
+      // longitude: 3.75,
+      // latitude: 6.58333,
     ),
     City(
       id: 19,
@@ -36,8 +88,8 @@ class CityData extends ChangeNotifier {
       city: 'Owerri',
       country: 'Nigeria',
       isDefault: true,
-      lon: 7.03041,
-      lat: 5.48333,
+      // longitude: 7.03041,
+      // latitude: 5.48333,
     ),
     City(
       id: 20,
@@ -45,8 +97,8 @@ class CityData extends ChangeNotifier {
       city: 'Port Harcourt',
       country: 'Nigeria',
       isDefault: false,
-      lon: 7.0134,
-      lat: 4.77742,
+      // longitude: 7.0134,
+      // latitude: 4.77742,
     ),
     City(
       id: 21,
@@ -54,8 +106,8 @@ class CityData extends ChangeNotifier {
       city: 'Abuja',
       country: 'Nigeria',
       isDefault: false,
-      lon: 7.48976,
-      lat: 9.05735,
+      // longitude: 7.48976,
+      // latitude: 9.05735,
     ),
     City(
       id: 16,
@@ -63,8 +115,8 @@ class CityData extends ChangeNotifier {
       city: 'Regina',
       country: 'Canada',
       isDefault: false,
-      lon: -104.617798,
-      lat: 50.450081,
+      // longitude: -104.617798,
+      // latitude: 50.450081,
     ),
     City(
       id: 2,
@@ -72,8 +124,8 @@ class CityData extends ChangeNotifier {
       city: 'London',
       country: 'United Kindgom',
       isDefault: false,
-      lon: -0.09184,
-      lat: 51.512791,
+      // longitude: -0.09184,
+      // latitude: 51.512791,
     ),
     City(
       id: 17,
@@ -81,8 +133,8 @@ class CityData extends ChangeNotifier {
       city: 'Saskatchewan',
       country: 'Canada',
       isDefault: false,
-      lon: -106.000992,
-      lat: 54.000099,
+      // longitude: -106.000992,
+      // latitude: 54.000099,
     ),
     City(
       id: 18,
@@ -90,8 +142,8 @@ class CityData extends ChangeNotifier {
       city: 'Edinburgh',
       country: 'United Kingdom',
       isDefault: false,
-      lon: -3.19648,
-      lat: 55.952061,
+      // longitude: -3.19648,
+      // latitude: 55.952061,
     ),
     City(
       id: 3,
@@ -99,8 +151,8 @@ class CityData extends ChangeNotifier {
       city: 'Tokyo',
       country: 'Japan',
       isDefault: false,
-      lon: 139.691711,
-      lat: 35.689499,
+      // longitude: 139.691711,
+      // latitude: 35.689499,
     ),
     City(
       id: 4,
@@ -108,8 +160,8 @@ class CityData extends ChangeNotifier {
       city: 'Delhi',
       country: 'India',
       isDefault: false,
-      lon: 77.216667,
-      lat: 28.666668,
+      // longitude: 77.216667,
+      // latitude: 28.666668,
     ),
     City(
       id: 5,
@@ -117,8 +169,8 @@ class CityData extends ChangeNotifier {
       city: 'Beijing',
       country: 'China',
       isDefault: false,
-      lon: 116.397232,
-      lat: 39.907501,
+      // longitude: 116.397232,
+      // latitude: 39.907501,
     ),
     City(
       id: 6,
@@ -126,8 +178,8 @@ class CityData extends ChangeNotifier {
       city: 'Paris',
       country: 'France',
       isDefault: false,
-      lon: 2.3486,
-      lat: 48.853401,
+      // longitude: 2.3486,
+      // latitude: 48.853401,
     ),
     City(
       id: 7,
@@ -135,26 +187,26 @@ class CityData extends ChangeNotifier {
       city: 'Rome',
       country: 'Italy',
       isDefault: false,
-      lon: 12.4839,
-      lat: 41.894741,
+      // longitude: 12.4839,
+      // latitude: 41.894741,
     ),
     City(
       id: 8,
       isSelected: false,
       city: 'Amsterdam',
-      country: 'Netherlands',
+      country: 'Netherlatitudeds',
       isDefault: false,
-      lon: 4.88969,
-      lat: 52.374031,
+      // longitude: 4.88969,
+      // latitude: 52.374031,
     ),
     City(
       id: 9,
       isSelected: false,
-      city: 'Barcelona',
+      city: 'Barcelongitudea',
       country: 'Spain',
       isDefault: false,
-      lon: 2.15899,
-      lat: 41.38879,
+      // longitude: 2.15899,
+      // latitude: 41.38879,
     ),
     City(
       id: 10,
@@ -162,8 +214,8 @@ class CityData extends ChangeNotifier {
       city: 'Miami',
       country: 'United States',
       isDefault: false,
-      lon: -80.193657,
-      lat: 25.774269,
+      // longitude: -80.193657,
+      // latitude: 25.774269,
     ),
     City(
       id: 11,
@@ -171,8 +223,8 @@ class CityData extends ChangeNotifier {
       city: 'Vienna',
       country: 'Austria',
       isDefault: false,
-      lon: 16.37208,
-      lat: 48.208488,
+      // longitude: 16.37208,
+      // latitude: 48.208488,
     ),
     City(
       id: 12,
@@ -180,8 +232,8 @@ class CityData extends ChangeNotifier {
       city: 'Berlin',
       country: 'United States',
       isDefault: false,
-      lon: -88.943451,
-      lat: 43.96804,
+      // longitude: -88.943451,
+      // latitude: 43.96804,
     ),
     City(
       id: 13,
@@ -189,8 +241,8 @@ class CityData extends ChangeNotifier {
       city: 'Toronto',
       country: 'Canada',
       isDefault: false,
-      lon: -79.416298,
-      lat: 43.700111,
+      // longitude: -79.416298,
+      // latitude: 43.700111,
     ),
     City(
       id: 14,
@@ -198,8 +250,8 @@ class CityData extends ChangeNotifier {
       city: 'Brussels',
       country: 'Belgium',
       isDefault: false,
-      lon: 4.34878,
-      lat: 50.850449,
+      // longitude: 4.34878,
+      // latitude: 50.850449,
     ),
     City(
       id: 15,
@@ -207,8 +259,8 @@ class CityData extends ChangeNotifier {
       city: 'Nairobi',
       country: 'Kenya',
       isDefault: false,
-      lon: 36.833328,
-      lat: -1.28333,
+      // longitude: 36.833328,
+      // latitude: -1.28333,
     ),
     City(
       id: 22,
@@ -216,8 +268,8 @@ class CityData extends ChangeNotifier {
       city: 'Accra',
       country: 'Ghana',
       isDefault: false,
-      lon: -0.1969,
-      lat: 5.55602,
+      // longitude: -0.1969,
+      // latitude: 5.55602,
     ),
     City(
       id: 23,
@@ -225,8 +277,8 @@ class CityData extends ChangeNotifier {
       city: 'Johannesburg',
       country: 'South Africa',
       isDefault: false,
-      lon: 28.043631,
-      lat: -26.202271,
+      // longitude: 28.043631,
+      // latitude: -26.202271,
     ),
     City(
       id: 24,
@@ -234,8 +286,8 @@ class CityData extends ChangeNotifier {
       city: 'California',
       country: 'United States',
       isDefault: false,
-      lon: -76.507446,
-      lat: 38.3004,
+      // longitude: -76.507446,
+      // latitude: 38.3004,
     ),
     City(
       id: 25,
@@ -243,8 +295,8 @@ class CityData extends ChangeNotifier {
       city: 'Malyye Mosty',
       country: 'Russia',
       isDefault: false,
-      lon: 37.700001,
-      lat: 56.433334,
+      // longitude: 37.700001,
+      // latitude: 56.433334,
     ),
     City(
       id: 26,
@@ -252,8 +304,8 @@ class CityData extends ChangeNotifier {
       city: 'New York',
       country: 'United States',
       isDefault: false,
-      lon: -74.005966,
-      lat: 40.714272,
+      // longitude: -74.005966,
+      // latitude: 40.714272,
     ),
     City(
       id: 27,
@@ -261,8 +313,8 @@ class CityData extends ChangeNotifier {
       city: 'Chicago',
       country: 'United States',
       isDefault: false,
-      lon: -87.650047,
-      lat: 41.850029,
+      // longitude: -87.650047,
+      // latitude: 41.850029,
     ),
     City(
       id: 28,
@@ -270,8 +322,8 @@ class CityData extends ChangeNotifier {
       city: 'Ibadan',
       country: 'Nigeria',
       isDefault: false,
-      lon: 3.89639,
-      lat: 7.38778,
+      // longitude: 3.89639,
+      // latitude: 7.38778,
     ),
     City(
       id: 29,
@@ -279,8 +331,8 @@ class CityData extends ChangeNotifier {
       city: 'Montreal',
       country: 'Canada',
       isDefault: false,
-      lon: -105.767662,
-      lat: 54.050098,
+      // longitude: -105.767662,
+      // latitude: 54.050098,
     ),
     City(
       id: 30,
@@ -288,8 +340,8 @@ class CityData extends ChangeNotifier {
       city: 'Edmonton',
       country: 'Canada',
       isDefault: false,
-      lon: -113.468712,
-      lat: 53.55014,
+      // longitude: -113.468712,
+      // latitude: 53.55014,
     ),
   ];
 

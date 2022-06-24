@@ -1,5 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:weatherapp/providers/city.dart';
+import 'package:http/http.dart' as http;
+
+import '../constants/constants.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -9,24 +15,46 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-// NIXX0012
+// This screen handles both search type and selection type
+
 class _HomeScreenState extends State<HomeScreen> {
-  int humidity = 0;
-  int temperature = 0;
-  int pressure = 0;
-  int windSpeed = 0;
-  int maxTemp = 0;
-  int minTemp = 0;
-  String weatherStateName = 'Loading...';
+  var isInit = true;
+  var errorOccured = false;
+  var errorMsg = '';
 
-  String imgUrl = '';
-  String description = '';
-  String currentState = '...Loading';
-  double lon = 7.03041; // default location longitude
-  double lat = 5.48333; // default location latitude
-  String location = 'Owerri, Nigeria'; // default location name
+  @override
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  void didChangeDependencies() async {
+    var cityData = Provider.of<CityData>(context);
+    if (isInit) {
+      var urlString =
+          'https://api.openweathermap.org/data/2.5/weather?q=${cityData.weatherCity}&appid=${cityData.weatherAPI}';
+      var searchedResult = await http.get(Uri.parse(urlString));
+      var response = json.decode(searchedResult.body);
+      print(response);
+      
 
+      
+      // if (jsonConvert.cod == '404') {
+      //   errorMsg = jsonConvert.code.message;
+      // }
+      // try {
+      //   print(jsonConvert.temp);
+      // } catch (e) {
+      //   setState(() {
+      //     errorOccured = true;
+      //   });
+      // }
+    }
+    super.didChangeDependencies();
+    setState(() {
+      isInit = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
         statusBarColor: Colors.transparent,
       ),
     );
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Constants.primaryColor,
+      ),
+      body: Column(
+        children: [],
+      ),
+    );
   }
 }

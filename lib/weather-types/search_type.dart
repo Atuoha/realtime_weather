@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' as http;
 import '../constants/constants.dart';
 import '../providers/city.dart';
+import '../screens/screens.dart';
 
 class SearchType extends StatefulWidget {
   static const routeName = '/search-selection';
@@ -16,10 +19,30 @@ class SearchType extends StatefulWidget {
 class _SearchTypeState extends State<SearchType> {
   var textController = TextEditingController();
   String searchedCity = '';
+  var error = false;
+  var errorMsg = '';
 
+  void searchCity() async {
+    var cityData = Provider.of<CityData>(context, listen: false);
+    var urlString =
+        'https://api.openweathermap.org/data/2.5/weather?q=$searchedCity&appid=${cityData.weatherAPI}';
+    var searchedResult = await http.get(Uri.parse(urlString));
+    var response = json.decode(searchedResult.body);
 
-  void searchCity(){
+    if (response.cod == '404') {
+      setState(() {
+        errorMsg = response.message;
+      });
+      print('This place doesn\'t exist ');
+    } else {
+      cityData.updateWeatherCity(searchedCity);
+      print(response);
+    }
+  }
 
+  // navigating to home screen
+  void _navigateToHomeScreen() {
+    Navigator.of(context).pushNamed(HomeScreen.routeName);
   }
 
   @override
@@ -33,10 +56,10 @@ class _SearchTypeState extends State<SearchType> {
       ),
     );
     return Scaffold(
-      floatingActionButton: cityProvider.searchedCity.isNotEmpty
+      floatingActionButton: cityProvider.weatherCity.isNotEmpty
           ? FloatingActionButton(
               backgroundColor: Constants.primaryColor,
-              onPressed: searchCity,
+              onPressed: _navigateToHomeScreen,
               child: const Icon(
                 Icons.pin_drop,
                 color: Colors.white,
@@ -55,9 +78,9 @@ class _SearchTypeState extends State<SearchType> {
           ),
         ),
         actions: [
-          cityProvider.searchedCity.isNotEmpty
+          cityProvider.weatherCity.isNotEmpty
               ? IconButton(
-                  onPressed: searchCity,
+                  onPressed: _navigateToHomeScreen,
                   icon: const Icon(Icons.search),
                   color: Colors.white,
                 )
@@ -83,6 +106,7 @@ class _SearchTypeState extends State<SearchType> {
                       searchedCity = value!;
                     });
                   },
+                  onFieldSubmitted: (value) {},
                   autofocus: true,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -95,7 +119,7 @@ class _SearchTypeState extends State<SearchType> {
                     hintStyle: const TextStyle(color: Colors.grey),
                     icon: Icon(Icons.pin_drop, color: Constants.primaryColor),
                     suffixIcon: IconButton(
-                      onPressed: null,
+                      onPressed: searchCity,
                       icon: Icon(
                         Icons.search,
                         color: Constants.primaryColor,
@@ -106,7 +130,24 @@ class _SearchTypeState extends State<SearchType> {
                   ),
                 ),
               ),
-            )
+            ),
+            errorMsg.isNotEmpty ? Center(
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset('assets/images/ss.PNG'),
+                  ),
+                  Text(
+                    'An Error Occurred...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey.shade300,
+                    ),
+                  )
+                ],
+              ),
+            ): const Text('')
           ],
         ),
       ),

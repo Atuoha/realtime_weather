@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import '../constants/constants.dart';
+import '../providers/city.dart';
 import '../weather-types/types.dart';
 
 class WeatherType extends StatelessWidget {
@@ -9,6 +11,8 @@ class WeatherType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cityProvider = Provider.of<CityData>(context);
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -31,11 +35,15 @@ class WeatherType extends StatelessWidget {
               Column(
                 children: [
                   GestureDetector(
-                    onTap: () => Navigator.of(
-                      context,
-                    ).pushNamed(
-                      CitySelectionType.routeName,
-                    ),
+                    onTap: () {
+                      Navigator.of(
+                        context,
+                      ).pushNamed(
+                        CitySelectionType.routeName,
+                      );
+                      cityProvider.swapSelectedData();
+                      cityProvider.toggleMode(true);
+                    },
                     child: Container(
                       height: 50,
                       width: 200,
@@ -66,11 +74,14 @@ class WeatherType extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () => Navigator.of(
-                      context,
-                    ).pushNamed(
-                      SearchType.routeName,
-                    ),
+                    onTap: () {
+                      Navigator.of(
+                        context,
+                      ).pushNamed(
+                        SearchType.routeName,
+                      );
+                      cityProvider.toggleMode(false);
+                    },
                     child: Container(
                       height: 50,
                       width: 200,
@@ -83,7 +94,7 @@ class WeatherType extends StatelessWidget {
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              'Search City',
+                              'City Search',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Constants.primaryColor,
