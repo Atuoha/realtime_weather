@@ -11,7 +11,6 @@ class CitySelectionType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // navigating to home screen
     void _navigateToHomeScreen() {
       Navigator.of(context).pushNamed(HomeScreen.routeName);
@@ -50,15 +49,15 @@ class CitySelectionType extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: _navigateToHomeScreen,
-            icon: Icon(
-              cityProvider.getSelectedCities().isNotEmpty
-                  ? Icons.chevron_right_rounded
-                  : null,
-              color: Colors.white,
-            ),
-          )
+          cityProvider.getSelectedCities().isNotEmpty
+              ? IconButton(
+                  onPressed: _navigateToHomeScreen,
+                  icon: const Icon(
+                    Icons.chevron_right_rounded,
+                    color: Colors.white,
+                  ),
+                )
+              : const Text('')
         ],
       ),
       body: ListView.builder(
