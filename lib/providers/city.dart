@@ -7,23 +7,90 @@ class CityData extends ChangeNotifier {
 
   // weather data
   String weatherCity = '';
-  var selectedlatitude = 0.0;
-  var selectedlongitudeg = 0.0;
-  int selectedhumidity = 0;
-  int selectedtemperature = 0;
-  int selectedpressure = 0;
-  int selectedWindSpeed = 0;
-  int selectedMaxTemp = 0;
-  int selectedMinTemp = 0;
-  String selectedWeatherStateName = 'Loading...';
+  int weatherHumidity = 0;
+  double weatherTemp = 0.0;
+  double weatherMaxTemp = 0.0;
+  double weatherMinTemp = 0.0;
+  int weatherPressure = 0;
+  double weatherWindSpeed = 0.0;
+  int weatherWindDegree = 0;
+  int weatherSunrise = 0;
+  int weatherSunset = 0;
+  int weatherTimzone = 0;
+  String weatherWeatherStateName = 'Loading...';
 
-  String selectedImgUrl = '';
-  String selectedDescription = '';
-  String selectedDurrentState = '...Loading';
+  double weatherFealsLike = 0.0;
+  String weatherImgUrl = '';
+  String weatherDescription = '';
+  String weatherCurrentState = '...Loading';
+  String weatherCountry = '...Loading';
+
+  // updating weather location
+  void updateWeather(
+    int humidity,
+    int pressure,
+    double windSpeed,
+    int windDegree,
+    int sunrise,
+    int sunset,
+    int timezone,
+    double temp,
+    double maxTemp,
+    double minTemp,
+    String weatherName,
+    double feelsLike,
+    String imgUrl,
+    String description,
+    String currentState,
+    String country,
+  ) {
+    weatherHumidity = humidity;
+    weatherTemp = temp;
+    weatherMaxTemp = maxTemp;
+    weatherMinTemp = minTemp;
+    weatherPressure = pressure;
+    weatherWindSpeed = windSpeed;
+    weatherWindDegree = windDegree;
+    weatherSunrise = sunrise;
+    weatherSunset = sunset;
+    weatherTimzone = timezone;
+    weatherWeatherStateName = weatherName;
+
+    weatherFealsLike = feelsLike;
+    weatherImgUrl = imgUrl;
+    weatherDescription = description;
+    weatherCurrentState = weatherName;
+    weatherCountry = country;
+    notifyListeners();
+  }
+
+  // unmounting currentWeatherDetails
+  void unMountWeatherDetails() {
+    weatherCity = '';
+    weatherHumidity = 0;
+    weatherTemp = 0.0;
+    weatherMaxTemp = 0.0;
+    weatherMinTemp = 0.0;
+    weatherPressure = 0;
+    weatherWindSpeed = 0.0;
+    weatherWindDegree = 0;
+    weatherSunrise = 0;
+    weatherSunset = 0;
+    weatherTimzone = 0;
+    weatherWeatherStateName = 'Loading...';
+
+    weatherFealsLike = 0.0;
+    weatherImgUrl = '';
+    weatherDescription = '';
+    weatherCurrentState = '...Loading';
+    weatherCountry = '...Loading';
+    notifyListeners();
+  }
 
   // mode
   bool selectionMode = true;
 
+  // changing weather surfing mode
   void toggleMode(bool selection) {
     selectionMode = selection;
     switch (selection) {
@@ -49,11 +116,13 @@ class CityData extends ChangeNotifier {
     notifyListeners();
   }
 
+  // unMounting weatherCity
   void clearSelectedData() {
     weatherCity = '';
     notifyListeners();
   }
 
+  // toggling city selection - used in selection mode
   void toggleIsSelected(int id) {
     var city = _citiesList.firstWhere(
       (city) => city.id == id,
@@ -62,16 +131,11 @@ class CityData extends ChangeNotifier {
     notifyListeners();
   }
 
-  // void updateWeather() {
-  //   currentWeather = data;
-  //   notifyListeners();
-  // }
-
   List cities() {
     return [..._citiesList];
   }
 
-  //List of Cities data
+  //List of Cities data for selection mode
   //-- if you need more cities to select from, you can use the city.list. follow the format and add more cities to the list
   final List _citiesList = [
     City(

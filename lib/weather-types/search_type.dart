@@ -24,6 +24,7 @@ class _SearchTypeState extends State<SearchType> {
   var msg = 'Search by entering the name of the city';
   var isLoading = false;
 
+  // submitting the search
   void searchCity() async {
     setState(() {
       isLoading = true;
@@ -34,28 +35,47 @@ class _SearchTypeState extends State<SearchType> {
     var searchedResult = await http.get(Uri.parse(urlString));
     var response = json.decode(searchedResult.body);
 
-    if (searchedResult.statusCode != 200) {
-      setState(() {
-        isLoading = false;
-        msg = 'Opps! City not found. Check spellings';
-        responseImage = 'assets/images/not_found.png';
-      });
-      cityData.clearSelectedData;
-    } else {
-      setState(() {
-        isLoading = false;
-        msg =
-            'Weather details obtained. Click on the new appeared button to view';
-        responseImage = 'assets/images/found.png';
-      });
-      print(response);
-      cityData.updateWeatherCity(searchedCity);
+    // switching conditions based on statusCode
+    switch (searchedResult.statusCode) {
+      case 200:
+        setState(() {
+          isLoading = false;
+          msg =
+              'Weather details obtained. Click on the new appeared button to view';
+          responseImage = 'assets/images/found.png';
+        });
+        // ignore: avoid_print
+        print(response);
+        cityData.updateWeatherCity(searchedCity);
+        break;
+
+      case 401:
+      case 429:
+      case 400:
+        setState(() {
+          isLoading = false;
+          msg = 'Opps! Something is wrong somewhere';
+          responseImage = 'assets/images/404.png';
+        });
+        cityData.clearSelectedData;
+        break;
+
+      case 404:
+        setState(() {
+          isLoading = false;
+          msg = 'Opps! City not found. Check spellings';
+          responseImage = 'assets/images/not_found.png';
+        });
+        cityData.clearSelectedData;
+        break;
+
+      default:
     }
   }
 
   // navigating to home screen
-  void _navigateToHomeScreen() {
-    Navigator.of(context).pushNamed(HomeScreen.routeName);
+  void _navigateToMainScreen() {
+    Navigator.of(context).pushNamed(MainScreen.routeName);
   }
 
   @override
@@ -72,7 +92,7 @@ class _SearchTypeState extends State<SearchType> {
       floatingActionButton: cityProvider.weatherCity.isNotEmpty
           ? FloatingActionButton(
               backgroundColor: Constants.primaryColor,
-              onPressed: _navigateToHomeScreen,
+              onPressed: _navigateToMainScreen,
               child: const Icon(
                 Icons.pin_drop,
                 color: Colors.white,
@@ -93,7 +113,7 @@ class _SearchTypeState extends State<SearchType> {
         actions: [
           cityProvider.weatherCity.isNotEmpty
               ? IconButton(
-                  onPressed: _navigateToHomeScreen,
+                  onPressed: _navigateToMainScreen,
                   icon: const Icon(Icons.search),
                   color: Colors.white,
                 )

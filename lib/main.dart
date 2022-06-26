@@ -18,7 +18,7 @@ class WeatherApp extends StatelessWidget {
         title: 'WeatherApp',
         home: const GetStarted(),
         routes: {
-          HomeScreen.routeName: (context) => const HomeScreen(),
+          MainScreen.routeName: (context) => const MainScreen(),
           WeatherType.routeName: (context) => const WeatherType(),
           CitySelectionType.routeName: (context) => const CitySelectionType(),
           SearchType.routeName: (context) => const SearchType(),

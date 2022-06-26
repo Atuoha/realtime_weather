@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/city.dart';
-import 'package:weatherapp/screens/home_screen.dart';
+import 'package:weatherapp/screens/main_screen.dart';
 import '../constants/constants.dart';
 
 class CitySelectionType extends StatelessWidget {
@@ -13,8 +13,8 @@ class CitySelectionType extends StatelessWidget {
   Widget build(BuildContext context) {
     var cityProvider = Provider.of<CityData>(context);
     // navigating to home screen
-    void _navigateToHomeScreen() {
-      Navigator.of(context).pushNamed(HomeScreen.routeName);
+    void _navigateToMainScreen() {
+      Navigator.of(context).pushNamed(MainScreen.routeName);
       cityProvider.swapSelectedData();
     }
 
@@ -30,7 +30,7 @@ class CitySelectionType extends StatelessWidget {
       floatingActionButton: cityProvider.getSelectedCities().isNotEmpty
           ? FloatingActionButton(
               backgroundColor: Constants.primaryColor,
-              onPressed: _navigateToHomeScreen,
+              onPressed: _navigateToMainScreen,
               child: const Icon(
                 Icons.pin_drop,
                 color: Colors.white,
@@ -52,7 +52,7 @@ class CitySelectionType extends StatelessWidget {
         actions: [
           cityProvider.getSelectedCities().isNotEmpty
               ? IconButton(
-                  onPressed: _navigateToHomeScreen,
+                  onPressed: _navigateToMainScreen,
                   icon: const Icon(
                     Icons.chevron_right_rounded,
                     color: Colors.white,
