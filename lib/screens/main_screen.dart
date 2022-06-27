@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/city.dart';
 import 'package:http/http.dart' as http;
 
+import '../components/main_data_container.dart';
+import '../components/weather_item.dart';
 import '../constants/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -20,8 +22,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   var isInit = true;
-  var errorOccured = false;
-  var errorMsg = '';
+  var isLoading = true;
 
   @override
   void initState() {
@@ -33,51 +34,36 @@ class _MainScreenState extends State<MainScreen> {
     var cityData = Provider.of<CityData>(context);
     if (isInit) {
       var urlString =
-          'https://api.openweathermap.org/data/2.5/weather?q=${cityData.weatherCity}&appid=${cityData.weatherAPI}';
+          'https://api.openweathermap.org/data/2.5/forecast?q=${cityData.weatherCity}&appid=${cityData.weatherAPI}';
       var searchedResult = await http.get(Uri.parse(urlString));
       var response = json.decode(searchedResult.body);
 
-      // RESPONSE SAMPLE
-      // {"coord":{"lon":7.4943,"lat":6.4402},"weather":[{"id":500,"main":"Rain","description":"light rain","icon":"10n"}],"base":"stations","main":{"temp":297.79,"feels_like":298.63,"temp_min":297.79,"temp_max":297.79,"pressure":1011,"humidity":89,"sea_level":1011,"grnd_level":988},"visibility":10000,"wind":{"speed":2.46,"deg":221,"gust":6.35},"rain":{"1h":0.11},"clouds":{"all":100},"dt":1656094652,"sys":{"country":"NG","sunrise":1656047850,"sunset":1656092832},"timezone":3600,"id":2343279,"name":"Enugu","cod":200}
-
-      // RESPONSE DISTRIBUTION
-      // print(cityData.weatherCity);
-      // print(response['weather'][0]['description']); //description
-      // print(response['weather'][0]['main']); //weather
-      // print(response['weather'][0]['icon']); //icon
-      // print(response['main']['temp']); //temp
-      // print(response['main']['feels_like']); //feels like
-      // print(response['main']['temp_min']); //min_temp
-      // print(response['main']['temp_max']); //max_temp
-      // print(response['main']['pressure']); //pressure
-      // print(response['main']['humidity']); //humidity
-      // print(response['wind']['speed']); //windSpeed
-      // print(response['wind']['deg']); //wind Degree
-      // print(response['sys']['country']); //country
-      // print(response['sys']['sunrise']); //sunrise
-      // print(response['sys']['sunset']); //sunset
-      // print(response['timezone']); //timezone
+      if (searchedResult.statusCode == 200) {
+        setState(() {
+          isLoading = false;
+        });
+      }
 
       // Updating new weather details through provider
       cityData.updateWeather(
           // You can assign them to a variable if you desire
-          response['main']['humidity'],
-          response['main']['pressure'],
-          response['wind']['speed'],
-          response['wind']['deg'],
-          response['sys']['sunrise'],
-          response['sys']['sunset'],
-          response['timezone'],
-          response['main']['temp'],
-          response['main']['temp_max'],
-          response['main']['temp_min'],
-          response['weather'][0]['main'],
-          response['main']['feels_like'],
-          // 'http://openweathermap.org/img/wn/${response['weather'][0]['icon'] + '@3x.png'}',
-          response['weather'][0]['icon'],
-          response['weather'][0]['description'],
-          response['weather'][0]['main'],
-          response['sys']['country']);
+          response['list'][0]['main']['humidity'],
+          response['list'][0]['main']['pressure'],
+          response['list'][0]['wind']['speed'],
+          response['list'][0]['wind']['deg'],
+          response['list'][0]['sys']['sunrise'],
+          response['list'][0]['sys']['sunset'],
+          response['list'][0]['timezone'],
+          response['list'][0]['main']['temp'],
+          response['list'][0]['main']['temp_max'],
+          response['list'][0]['main']['temp_min'],
+          response['list'][0]['weather'][0]['main'],
+          response['list'][0]['main']['feels_like'],
+          response['list'][0]['weather'][0]['icon'],
+          response['list'][0]['weather'][0]['description'],
+          response['list'][0]['weather'][0]['main'],
+          response['list'][0]['sys']['country'],
+          response['list']);
     }
     super.didChangeDependencies();
     setState(() {
@@ -200,69 +186,93 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            Container(
-              width: size.width,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Constants.primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Constants.primaryColor.withOpacity(.5),
-                    offset: const Offset(0, 25),
-                    blurRadius: 10,
-                    spreadRadius: -12,
-                  ),
-                ],
-              ),
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned(
-                    top: -40,
-                    right: 20,
-                    child: Image.asset(
-                      'assets/images/${cityData.weatherImgUrl}.png',
-                      width: 150,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 30,
-                    right: 20,
-                    child: Text(
-                      cityData.weatherWeatherStateName,
+            DataContainer(
+              imgUrl: isLoading
+                  ? 'assets/images/selection.png'
+                  : 'assets/images/${cityData.weatherImgUrl}.png',
+              temp: cityData.weatherTemp.toStringAsFixed(0),
+              weatherState: cityData.weatherWeatherStateName,
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                WeatherItem(
+                  title: 'Min Temp',
+                  value: '${cityData.weatherMinTemp}',
+                  unit: 'C',
+                  imgAsset: 'assets/images/sleet.png',
+                ),
+                WeatherItem(
+                  title: 'Humidity',
+                  value: '${cityData.weatherHumidity}',
+                  unit: '',
+                  imgAsset: 'assets/images/humidity.png',
+                ),
+                WeatherItem(
+                  title: 'Wind Speed',
+                  value: '${cityData.weatherWindSpeed}',
+                  unit: 'km\\h',
+                  imgAsset: 'assets/images/windspeed.png',
+                ),
+                WeatherItem(
+                  title: 'Max Temp',
+                  value: '${cityData.weatherMaxTemp}',
+                  unit: 'C',
+                  imgAsset: 'assets/images/max-temp.png',
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    isLoading
+                        ? CircularProgressIndicator(
+                            color: Constants.primaryColor,
+                          )
+                        : Image.network(
+                            'http://openweathermap.org/img/wn/${cityData.weatherImgUrl}.png'),
+                    const SizedBox(width: 5),
+                    Text(
+                      cityData.weatherDescription.toUpperCase(),
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ],
+                ),
+                Text(
+                  'Next 5 Days',
+                  style: TextStyle(
+                    color: Constants.primaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Positioned(
-                    top: 50,
-                    left: 10,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cityData.weatherTemp.toStringAsFixed(0),
-                          style: const TextStyle(
-                            fontSize: 80,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white38,
-                          ),
-                        ),
-                        const Text(
-                          'o',
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white38,
-                          ),
-                        )
-                      ],
+                )
+              ],
+            ),
+            const SizedBox(height: 10),
+            Container(
+              height: 200,
+              // color: Colors.red,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: cityData.weatherList.length,
+                itemBuilder: (context, index) {
+                  var data = cityData.weatherList[index];
+                  return Container(
+                    child: Text(
+                      data['weather'][0]['main'],
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
-                  )
-                ],
+                  );
+                },
               ),
             )
           ],

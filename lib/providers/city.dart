@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import '../models/city.dart';
 
 class CityData extends ChangeNotifier {
@@ -25,6 +26,8 @@ class CityData extends ChangeNotifier {
   String weatherCurrentState = '...Loading';
   String weatherCountry = '...Loading';
 
+  var weatherList = [];
+
   // updating weather location
   void updateWeather(
     int humidity,
@@ -43,6 +46,7 @@ class CityData extends ChangeNotifier {
     String description,
     String currentState,
     String country,
+    List list,
   ) {
     weatherHumidity = humidity;
     weatherTemp = temp;
@@ -61,7 +65,22 @@ class CityData extends ChangeNotifier {
     weatherDescription = description;
     weatherCurrentState = weatherName;
     weatherCountry = country;
+
+    for (var weather in list) {
+      var currentDate = DateFormat.yMMMMEEEEd().format(
+        DateTime.now(),
+      );
+      var weatherDate = DateFormat.yMMMMEEEEd().format(
+        DateTime.parse(weather['dt_txt']),
+      );
+
+      if (currentDate != weatherDate) {
+        weatherList.add(weather);
+      }
+    }
+
     notifyListeners();
+    print(weatherList);
   }
 
   // unmounting currentWeatherDetails
@@ -225,7 +244,7 @@ class CityData extends ChangeNotifier {
     City(
       id: 9,
       isSelected: false,
-      city: 'Barcelongitudea',
+      city: 'Barcelona',
       country: 'Spain',
     ),
     City(
