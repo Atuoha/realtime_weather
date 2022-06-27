@@ -67,20 +67,21 @@ class CityData extends ChangeNotifier {
     weatherCountry = country;
 
     for (var weather in list) {
-      var currentDate = DateFormat.yMMMMEEEEd().format(
-        DateTime.now(),
-      );
-      var weatherDate = DateFormat.yMMMMEEEEd().format(
-        DateTime.parse(weather['dt_txt']),
-      );
+      // Comment this code if you don't want it to show any feature weather from today and comment --- weatherList.add(weather);  ---
+      // var currentDate = DateFormat.yMMMMEEEEd().format(
+      //   DateTime.now(),
+      // );
+      // var weatherDate = DateFormat.yMMMMEEEEd().format(
+      //   DateTime.parse(weather['dt_txt']),
+      // );
 
-      if (currentDate != weatherDate) {
-        weatherList.add(weather);
-      }
+      // if (currentDate != weatherDate) {
+      //   weatherList.add(weather);
+      // }
+      weatherList.add(weather);
     }
 
     notifyListeners();
-    print(weatherList);
   }
 
   // unmounting currentWeatherDetails

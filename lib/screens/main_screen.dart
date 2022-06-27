@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:weatherapp/providers/city.dart';
 import 'package:http/http.dart' as http;
 
+import '../components/forecast_item.dart';
 import '../components/main_data_container.dart';
 import '../components/weather_item.dart';
 import '../constants/constants.dart';
@@ -23,6 +24,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   var isInit = true;
   var isLoading = true;
+  var selectedIndex = 0;
 
   @override
   void initState() {
@@ -193,7 +195,7 @@ class _MainScreenState extends State<MainScreen> {
               temp: cityData.weatherTemp.toStringAsFixed(0),
               weatherState: cityData.weatherWeatherStateName,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -223,7 +225,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -231,8 +233,9 @@ class _MainScreenState extends State<MainScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     isLoading
-                        ? CircularProgressIndicator(
-                            color: Constants.primaryColor,
+                        ? Image.asset(
+                            'assets/images/not_found.png',
+                            width: 100,
                           )
                         : Image.network(
                             'http://openweathermap.org/img/wn/${cityData.weatherImgUrl}.png'),
@@ -246,35 +249,44 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ],
                 ),
-                Text(
-                  'Next 5 Days',
-                  style: TextStyle(
-                    color: Constants.primaryColor,
-                    fontWeight: FontWeight.bold,
+                FittedBox(
+                  child: Text(
+                    'Next 5 Days | 3Hrs Interval',
+                    style: TextStyle(
+                      color: Constants.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 )
               ],
             ),
-            const SizedBox(height: 10),
-            Container(
-              height: 200,
-              // color: Colors.red,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: cityData.weatherList.length,
-                itemBuilder: (context, index) {
-                  var data = cityData.weatherList[index];
-                  return Container(
-                    child: Text(
-                      data['weather'][0]['main'],
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
+            const SizedBox(height: 30),
+            isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: Constants.primaryColor,
                     ),
-                  );
-                },
-              ),
-            )
+                  )
+                : SizedBox(
+                    height: 140,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: cityData.weatherList.length,
+                      itemBuilder: (context, index) {
+                        var data = cityData.weatherList[index];
+                       
+                        return ForecastItem(
+                          index: index,
+                          selectedIndex: selectedIndex,
+                          time: data['dt_txt'],
+                          status: data['weather'][0]['main'],
+                          image:
+                              'assets/images/${data['weather'][0]['icon']}.png',
+                        );
+                      },
+                    ),
+                  )
           ],
         ),
       ),
