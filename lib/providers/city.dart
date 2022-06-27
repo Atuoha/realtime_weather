@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 import '../models/city.dart';
 
 class CityData extends ChangeNotifier {
@@ -67,6 +66,7 @@ class CityData extends ChangeNotifier {
     weatherCountry = country;
 
     for (var weather in list) {
+
       // Comment this code if you don't want it to show any feature weather from today and comment --- weatherList.add(weather);  ---
       // var currentDate = DateFormat.yMMMMEEEEd().format(
       //   DateTime.now(),
@@ -78,7 +78,8 @@ class CityData extends ChangeNotifier {
       // if (currentDate != weatherDate) {
       //   weatherList.add(weather);
       // }
-      weatherList.add(weather);
+        weatherList.add(weather);
+
     }
 
     notifyListeners();

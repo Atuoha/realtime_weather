@@ -30,7 +30,7 @@ class ForecastItem extends StatelessWidget {
     return Container(
       height: 80,
       width: 90,
-      margin: const EdgeInsets.only(right: 10),
+      margin: const EdgeInsets.only(right: 15),
       decoration: BoxDecoration(
         color: index == selectedIndex ? Constants.primaryColor : Colors.white,
         boxShadow: index == selectedIndex
@@ -38,9 +38,9 @@ class ForecastItem extends StatelessWidget {
             : [
                 BoxShadow(
                   color: Constants.primaryColor,
-                  spreadRadius: 0.4,
-                  blurStyle: BlurStyle.inner,
-                  blurRadius: 7,
+                  spreadRadius: 2,
+                  blurStyle: BlurStyle.outer,
+                  blurRadius: 5,
                 ),
               ],
         borderRadius: BorderRadius.circular(10),

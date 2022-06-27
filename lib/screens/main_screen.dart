@@ -140,7 +140,6 @@ class _MainScreenState extends State<MainScreen> {
                               setState(() {
                                 isInit = true;
                               });
-                              print('City:$value');
                             },
                           ),
                         )
@@ -166,129 +165,144 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              cityData.weatherCity,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 30,
-              ),
-            ),
-            Text(
-              DateFormat.yMMMMEEEEd().format(
-                DateTime.now(),
-              ),
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 10),
-            DataContainer(
-              imgUrl: isLoading
-                  ? 'assets/images/selection.png'
-                  : 'assets/images/${cityData.weatherImgUrl}.png',
-              temp: cityData.weatherTemp.toStringAsFixed(0),
-              weatherState: cityData.weatherWeatherStateName,
-            ),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                WeatherItem(
-                  title: 'Min Temp',
-                  value: '${cityData.weatherMinTemp}',
-                  unit: 'C',
-                  imgAsset: 'assets/images/sleet.png',
+                Text(
+                  cityData.weatherCity,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                  ),
                 ),
-                WeatherItem(
-                  title: 'Humidity',
-                  value: '${cityData.weatherHumidity}',
-                  unit: '',
-                  imgAsset: 'assets/images/humidity.png',
+                Text(
+                  DateFormat.yMMMMEEEEd().format(
+                    DateTime.now(),
+                  ),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.grey,
+                  ),
                 ),
-                WeatherItem(
-                  title: 'Wind Speed',
-                  value: '${cityData.weatherWindSpeed}',
-                  unit: 'km\\h',
-                  imgAsset: 'assets/images/windspeed.png',
+                const SizedBox(height: 10),
+                DataContainer(
+                  imgUrl: isLoading
+                      ? 'assets/images/selection.png'
+                      : 'assets/images/${cityData.weatherImgUrl}.png',
+                  temp: cityData.weatherTemp.toStringAsFixed(0),
+                  weatherState: cityData.weatherWeatherStateName,
                 ),
-                WeatherItem(
-                  title: 'Max Temp',
-                  value: '${cityData.weatherMaxTemp}',
-                  unit: 'C',
-                  imgAsset: 'assets/images/max-temp.png',
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                const SizedBox(height: 40),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    isLoading
-                        ? Image.asset(
-                            'assets/images/not_found.png',
-                            width: 100,
-                          )
-                        : Image.network(
-                            'http://openweathermap.org/img/wn/${cityData.weatherImgUrl}.png'),
-                    const SizedBox(width: 5),
-                    Text(
-                      cityData.weatherDescription.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    WeatherItem(
+                      title: 'Min Temp',
+                      value: '${cityData.weatherMinTemp}',
+                      unit: 'C',
+                      imgAsset: 'assets/images/sleet.png',
+                    ),
+                    WeatherItem(
+                      title: 'Humidity',
+                      value: '${cityData.weatherHumidity}',
+                      unit: '',
+                      imgAsset: 'assets/images/humidity.png',
+                    ),
+                    WeatherItem(
+                      title: 'Wind Speed',
+                      value: '${cityData.weatherWindSpeed}',
+                      unit: 'km\\h',
+                      imgAsset: 'assets/images/windspeed.png',
+                    ),
+                    WeatherItem(
+                      title: 'Max Temp',
+                      value: '${cityData.weatherMaxTemp}',
+                      unit: 'C',
+                      imgAsset: 'assets/images/max-temp.png',
                     ),
                   ],
                 ),
-                FittedBox(
-                  child: Text(
-                    'Next 5 Days | 3Hrs Interval',
-                    style: TextStyle(
-                      color: Constants.primaryColor,
-                      fontWeight: FontWeight.bold,
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        isLoading
+                            ? Image.asset(
+                                'assets/images/not_found.png',
+                                width: 100,
+                              )
+                            : Image.network(
+                                'http://openweathermap.org/img/wn/${cityData.weatherImgUrl}.png'),
+                        const SizedBox(width: 5),
+                        Text(
+                          cityData.weatherDescription.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                )
+                    FittedBox(
+                      child: Text(
+                        'Next 5 Days | 3Hrs Interval',
+                        style: TextStyle(
+                          color: Constants.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 30),
+                
               ],
             ),
-            const SizedBox(height: 30),
-            isLoading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: Constants.primaryColor,
-                    ),
-                  )
-                : SizedBox(
-                    height: 140,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: cityData.weatherList.length,
-                      itemBuilder: (context, index) {
-                        var data = cityData.weatherList[index];
-                       
-                        return ForecastItem(
-                          index: index,
-                          selectedIndex: selectedIndex,
-                          time: data['dt_txt'],
-                          status: data['weather'][0]['main'],
-                          image:
-                              'assets/images/${data['weather'][0]['icon']}.png',
-                        );
-                      },
-                    ),
-                  )
-          ],
-        ),
+          ),
+          isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Constants.primaryColor,
+                        ),
+                      )
+                    : Padding(
+                      padding: const EdgeInsets.only(left:20),
+                      child: SizedBox(
+                          height: 150,
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: cityData.weatherList.length,
+                            itemBuilder: (context, index) {
+                              var data = cityData.weatherList[index];
+
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedIndex = index;
+                                  });
+                                },
+                                child: ForecastItem(
+                                  index: index,
+                                  selectedIndex: selectedIndex,
+                                  time: data['dt_txt'],
+                                  status: data['weather'][0]['main'],
+                                  image:
+                                      'assets/images/${data['weather'][0]['icon']}.png',
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                    )
+        ],
       ),
     );
   }
